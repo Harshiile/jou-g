@@ -1,0 +1,11 @@
+{
+  "name": "JOU-G",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^5.0.3",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  }
+}
