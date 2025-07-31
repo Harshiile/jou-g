@@ -4,8 +4,25 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/busboy": "^1.5.4",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/pg": "^8.15.5",
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.56.9",
+    "busboy": "^1.6.0",
     "dotenv": "^17.2.1",
-    "express": "^5.1.0"
+    "drizzle-orm": "^0.44.4",
+    "express": "^5.1.0",
+    "googleapis": "^154.1.0",
+    "googleapis-common": "^8.0.0",
+    "ioredis": "^5.6.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.4"
   }
 }
