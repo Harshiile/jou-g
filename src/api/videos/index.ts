@@ -1,10 +1,10 @@
 import { videoReviewLinkAPI, videoReviewValidateAPI } from "./review";
-import { videoUploadAPI } from "./upload";
 import { updateScheduleAPI } from "./update-schedule";
+import { workspaceVideosAPI } from "./get";
 
 export {
   videoReviewLinkAPI,
   videoReviewValidateAPI,
-  videoUploadAPI,
   updateScheduleAPI,
+  workspaceVideosAPI,
 };

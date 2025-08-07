@@ -10,7 +10,7 @@ import {
 } from "../../db/schema";
 import { db } from "../../db";
 import { and, eq } from "drizzle-orm";
-import { workspaceMetadata } from "./get";
+import { workspaceMetadata } from "../workspace/get";
 import { oauth2ClientCreds } from "../utils/secret";
 import { google } from "googleapis";
 
@@ -29,11 +29,10 @@ interface VideoMetadata {
   publishedAt?: string | null;
 }
 export const workspaceVideosAPI = async (
-  req: Request<{}, {}>,
+  req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-  const workspace = searchParams.get("ws");
+  const { workspace } = req.params;
 
   if (!workspace) throw new JOUError(404, "Request Params Invalid");
 

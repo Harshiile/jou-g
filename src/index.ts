@@ -14,5 +14,5 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 
-app.use("/", router);
+app.use(router);
 app.listen(PORT, () => console.log(`Server runs on ${PORT}`));

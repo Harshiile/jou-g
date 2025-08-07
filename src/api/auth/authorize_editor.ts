@@ -34,8 +34,7 @@ export const authorizeEditorValidateAPI = async (
   req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-  const link = searchParams.get("link");
+  const { link } = req.params;
 
   if (!link) throw new JOUError(404, "Link not found");
   try {

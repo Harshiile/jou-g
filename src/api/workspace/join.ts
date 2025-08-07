@@ -12,11 +12,10 @@ import { and, eq } from "drizzle-orm";
 import { workspaceMetadata } from "./get";
 
 export const workspaceInitialJoinAPI = async (
-  req: Request<{}, {}>,
+  req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-  const workspaceId = searchParams.get("ws");
+  const { workspaceId } = req.params;
 
   const { id: userId } = req.user;
 
@@ -103,13 +102,11 @@ export const workspaceInitialJoinAPI = async (
 };
 
 export const workspaceFinalJoinAPI = async (
-  req: Request<{}, {}>,
+  req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
-  const workspaceId = searchParams.get("ws");
-  const approve = searchParams.get("approve");
+  const { id, ws, approve } = req.query;
+  const workspaceId = ws;
 
   if (!id || !workspaceId || !approve)
     throw new JOUError(404, "Params Not Found");
@@ -121,8 +118,8 @@ export const workspaceFinalJoinAPI = async (
       .set({ authorize: true })
       .where(
         and(
-          eq(EditorWorkspaceJoinTable.workspace, workspaceId),
-          eq(EditorWorkspaceJoinTable.editor, id)
+          eq(EditorWorkspaceJoinTable.workspace, workspaceId as string),
+          eq(EditorWorkspaceJoinTable.editor, id as string)
         )
       )
       .catch((_) => {

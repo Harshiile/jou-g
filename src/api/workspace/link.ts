@@ -7,11 +7,10 @@ import { eq } from "drizzle-orm";
 import { workspaceMetadata } from "./get";
 
 export const workspaceJoinLinkAPI = async (
-  req: Request<{}, {}>,
+  req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-  const workspaceId = searchParams.get("ws");
+  const { workspaceId } = req.params;
 
   if (!workspaceId) throw new JOUError(404, "WorkSpace Id is not valid");
 
@@ -44,11 +43,10 @@ export const workspaceJoinLinkAPI = async (
 };
 
 export const workspaceJoinValidateAPI = async (
-  req: Request<{}, {}>,
+  req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-  const link = searchParams.get("link");
+  const { link } = req.params;
 
   if (!link) throw new JOUError(404, "Link not found");
   try {

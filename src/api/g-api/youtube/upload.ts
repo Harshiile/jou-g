@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { APIResponse } from "../../types/res";
-import { JOUError, JwtGenerate, JwtValidate } from "../utils";
-import { db } from "../../db";
-import { VideoTable } from "../../db/schema";
+import { APIResponse } from "../../../types/res";
+import { JOUError, JwtGenerate, JwtValidate } from "../../utils";
+import { db } from "../../../db";
+import { VideoTable } from "../../../db/schema";
 import { eq } from "drizzle-orm";
 
 interface reqBody {

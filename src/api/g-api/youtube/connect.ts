@@ -52,19 +52,18 @@ const getReconnectUrl = (workspaceEmail: string) => {
     login_hint: workspaceEmail,
   });
 };
-export const reconnectYoutubeURL = async (
+export const reconnectYoutubeURLAPI = async (
   req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("ws");
+  const { workspaceId } = req.params;
 
-  if (!id) throw new JOUError(404, "Params not found");
+  if (!workspaceId) throw new JOUError(404, "Params not found");
   try {
     const [ws] = await db
       .select({ email: WorkspaceTable.email })
       .from(WorkspaceTable)
-      .where(eq(WorkspaceTable.id, id));
+      .where(eq(WorkspaceTable.id, workspaceId));
 
     return res.json({
       message: "Reconnetion URL",

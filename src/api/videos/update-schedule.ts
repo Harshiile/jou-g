@@ -6,22 +6,21 @@ import { db } from "../../db";
 import { eq } from "drizzle-orm";
 
 export const updateScheduleAPI = async (
-  req: Request<{}, {}>,
+  req: Request,
   res: Response<APIResponse>
 ) => {
-  const { searchParams } = new URL(req.url);
-
-  const videoId = searchParams.get("id");
-  const newSchedule = searchParams.get("schedule");
+  const { id, schedule } = req.query;
+  const videoId = id;
+  const newSchedule = schedule;
 
   if (!videoId || !newSchedule) throw new JOUError(404, "Invalid Params");
 
   await db
     .update(VideoTable)
     .set({
-      willUploadAt: newSchedule,
+      willUploadAt: newSchedule as string,
     })
-    .where(eq(VideoTable.id, videoId))
+    .where(eq(VideoTable.id, videoId as string))
     .catch((_) => {
       throw new JOUError(400, "Update Schedule Failed, Try Again");
     });

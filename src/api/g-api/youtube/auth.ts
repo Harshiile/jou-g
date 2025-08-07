@@ -9,8 +9,7 @@ import { APIResponse } from "../../../types";
 
 export const authYoutube = async (req: Request, res: Response<APIResponse>) => {
   const { id: userId } = req.user;
-  const { searchParams } = new URL(req.url);
-  const code = searchParams.get("code");
+  const { code } = req.params;
 
   if (!code) throw new JOUError(400, "Code not generated after youtube signup");
 

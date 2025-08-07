@@ -9,6 +9,17 @@ import { VideoTable } from "../../../db/schema";
 import { driveCreds } from "../../utils/secret";
 import { google } from "googleapis";
 
+/*
+
+  Flow
+    1. Gets the video
+    2. Create Replica
+    3. Divides into Chunks/Replica
+    4. Uploads them all
+    5. For each Replica
+
+*/
+
 const parseFieldData = (data: string) => {
   if (data == "true") return true;
   else if (data === "null" || data === "undefined" || data === "") return null;
