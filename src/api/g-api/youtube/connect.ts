@@ -3,7 +3,7 @@ import { db } from "../../../db";
 import { WorkspaceTable } from "../../../db/schema";
 import { eq, sql } from "drizzle-orm";
 import { JOUError } from "../../utils";
-import { oauth2Client } from "../../utils/secret";
+import { oauth2ClientCreds } from "../../utils/secret";
 import { APIResponse } from "../../../types";
 
 // Connection URL
@@ -29,7 +29,7 @@ export const connectYoutubeAPI = async (
     "https://www.googleapis.com/auth/youtube.readonly",
     "https://www.googleapis.com/auth/userinfo.email",
   ];
-  const url = oauth2Client.generateAuthUrl({
+  const url = oauth2ClientCreds().generateAuthUrl({
     access_type: "offline",
     prompt: "consent",
     scope: scopes,
@@ -45,7 +45,7 @@ const getReconnectUrl = (workspaceEmail: string) => {
     "https://www.googleapis.com/auth/userinfo.email",
   ];
 
-  return oauth2Client.generateAuthUrl({
+  return oauth2ClientCreds().generateAuthUrl({
     access_type: "offline",
     prompt: "consent",
     scope: scopes,

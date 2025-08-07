@@ -1,5 +1,5 @@
 import * as GoogleApis from "googleapis-common";
-import { drive } from "../../utils/secret";
+import { driveCreds } from "../../utils/secret";
 import Stream from "node:stream";
 
 export const driveGetStream = async (
@@ -18,8 +18,8 @@ export const driveGetStream = async (
         responseType: "stream",
       };
   try {
-    return drive.files
-      .get(
+    return driveCreds()
+      .files.get(
         {
           fileId,
           fields: "size",

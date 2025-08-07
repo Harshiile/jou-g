@@ -9,6 +9,7 @@ import {
   WorkspaceTable,
 } from "../../db/schema";
 import { driveGetStream } from "../g-api/drive/get";
+import { getAccessToken } from "../utils";
 // import { driveGetStream } from "../drive/utils/index.ts";
 // import * as Notify from "../../mails/templates/notify.ts";
 // import { SendReconnectMail } from "../../mails/templates/reconnect.ts";
@@ -85,8 +86,10 @@ const uploadVideoOnYoutuber = async (fileId: string, workspaceId: string) => {
 
     // Video Uploading
     const { refreshToken } = video;
+    if (!refreshToken) throw new Error();
+
     oauth2Client.setCredentials({
-      refresh_token: refreshToken,
+      access_token: await getAccessToken(refreshToken),
     });
     const yt = google.youtube({ version: "v3", auth: oauth2Client });
 

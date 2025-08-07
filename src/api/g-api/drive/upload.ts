@@ -6,7 +6,8 @@ import { APIResponse } from "../../../types";
 import { JOUError } from "../../utils/error";
 import { db } from "../../../db";
 import { VideoTable } from "../../../db/schema";
-import { drive } from "../../utils/secret";
+import { driveCreds } from "../../utils/secret";
+import { google } from "googleapis";
 
 const parseFieldData = (data: string) => {
   if (data == "true") return true;
@@ -33,6 +34,7 @@ const DriveUpload = (
   headers: IncomingHttpHeaders
 ) => {
   const [fileName, fileExt] = filename.filename.split(".");
+  const drive = driveCreds();
   return drive.files.create(
     {
       requestBody: {
@@ -82,7 +84,6 @@ export const driveUploadAPI = async (
   };
   const uploadPromises: Promise<any>[] = [];
 
-  // if (req.headers["socket"]) {
   const fileIds: {
     fileId: null | string;
     thumbnailId: null | string;
@@ -103,18 +104,18 @@ export const driveUploadAPI = async (
       file: NodeJS.ReadableStream,
       filename: FileName
     ) => {
-      // uploadPromises.push(
-      //   DriveUpload(file, filename, req.headers)
-      //     .then((res) => {
-      //       if (fieldname === "video") fileIds.fileId = res.data.id!;
-      //       else if (fieldname === "thumbnail")
-      //         fileIds.thumbnailId = res.data.id!;
-      //     })
-      //     .catch((err) => {
-      //       console.log("--Error : ", err.message);
-      //       throw new JOUError(err.status, "Uploading Failed");
-      //     })
-      // );
+      uploadPromises.push(
+        DriveUpload(file, filename, req.headers)
+          .then((res) => {
+            if (fieldname === "video") fileIds.fileId = res.data.id!;
+            else if (fieldname === "thumbnail")
+              fileIds.thumbnailId = res.data.id!;
+          })
+          .catch((err) => {
+            console.log("--Error : ", err.message);
+            throw new JOUError(err.status, "Uploading Failed");
+          })
+      );
     }
   );
 
@@ -164,13 +165,14 @@ export const driveUploadAPI = async (
         //   .catch((err) => {
         //     throw new JOUError(err.status, "Video Insertion Failed");
         //   });
+
+        return res.json({ message: "Video Uploaded" });
       })
       .catch((err) => {
         console.error("One or more uploads failed:", err);
         res.json({ message: "Upload failed" });
       });
   });
-  // } else throw new JOUError(404, "Socket is not connected");
 };
 
 // export const deleteOnDrive = async (

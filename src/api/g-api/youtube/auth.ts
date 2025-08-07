@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { JOUError } from "../../utils";
-import { oauth2Client } from "../../utils/secret";
+import { getAccessToken, JOUError } from "../../utils";
+import { oauth2ClientCreds } from "../../utils/secret";
 import { google } from "googleapis";
 import { db } from "../../../db";
 import { WorkspaceTable } from "../../../db/schema";
@@ -15,6 +15,7 @@ export const authYoutube = async (req: Request, res: Response<APIResponse>) => {
   if (!code) throw new JOUError(400, "Code not generated after youtube signup");
 
   try {
+    const oauth2Client = oauth2ClientCreds();
     // Fetching Channel Credentials
     const channelCreds = await oauth2Client
       .getToken(code!.toString())
@@ -27,9 +28,11 @@ export const authYoutube = async (req: Request, res: Response<APIResponse>) => {
 
     const refToken = channelCreds.tokens.refresh_token;
 
+    if (!refToken) throw new JOUError(400);
+
     // Setting oAuth2Client
     oauth2Client.setCredentials({
-      refresh_token: refToken,
+      access_token: await getAccessToken(refToken),
     });
 
     const yt = google.youtube({ version: "v3", auth: oauth2Client });
